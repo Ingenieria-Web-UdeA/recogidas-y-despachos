@@ -9,3 +9,44 @@
 h1 {
   @apply text-2xl font-bold text-gray-800;
 }
+
+table {
+}
+
+td,
+th {
+  border: 1px solid black;
+}
+
+td > div {
+  @apply flex justify-center px-3;
+}
+
+th {
+  @apply bg-gray-800 px-3 text-white;
+}
+
+tr:nth-child(odd) {
+  @apply bg-gray-300;
+}
+
+label {
+  @apply flex flex-col;
+}
+
+input,
+select {
+  @apply rounded-lg border border-gray-300 px-2 py-1 outline-none focus:border-indigo-500;
+}
+
+button {
+  @apply rounded-lg bg-indigo-800 px-3 py-2 text-white hover:bg-indigo-500;
+}
+
+button:disabled {
+  @apply cursor-not-allowed bg-gray-300 text-gray-500;
+}
+
+button.secondary {
+  @apply bg-gray-400 text-gray-800 hover:bg-gray-200;
+}

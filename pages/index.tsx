@@ -2,6 +2,14 @@ import Layout from '@layouts/Layout';
 import Head from 'next/head';
 import ReactLoading from 'react-loading';
 import { toast, ToastContainer } from 'react-toastify';
+import { data } from 'utils/data';
+import _ from 'lodash';
+import DateFilters from '@components/DateFilters';
+import ActionButtons from '@components/ActionButtons';
+import { RecogidasContextProvider } from '@context/recogidasContext';
+import { ModalRecogidas } from '@components/modals/ModalRecogidas';
+import Modal from '@components/modals/Modal';
+import { ModalDespachos } from '@components/modals/ModalDespachos';
 
 export default function Home() {
   return (
@@ -13,37 +21,75 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Layout>
-        <div className='flex h-full w-full flex-col'>
-          <div className='flex justify-center'>
-            <h1>Titulo</h1>
-          </div>
-          <div className='flex justify-between'>
-            <div>Filtros</div>
-            <div className='flex gap-2'>
-              <button>Nueva recogida</button>
-              <button>Nuevo despacho</button>
-            </div>
-          </div>
-          <DesktopTable />
-          <MobileCards />
-        </div>
+        <RecogidasContextProvider>
+          <RecogidasDespachos />
+        </RecogidasContextProvider>
       </Layout>
     </>
   );
 }
 
+const RecogidasDespachos = () => {
+  return (
+    <div className='flex h-full w-full flex-col gap-2 p-4'>
+      <div className='flex justify-center'>
+        <h1>Recogidas y despachos</h1>
+      </div>
+      <div className='flex justify-between'>
+        <DateFilters />
+        <ActionButtons />
+      </div>
+      <DesktopTable />
+      <MobileCards />
+
+      <ModalRecogidas />
+      <ModalDespachos />
+    </div>
+  );
+};
+
 const DesktopTable = () => {
-  const fireAlert = () => {
-    toast.success('Esto es una alerta de success');
-    toast.warning('Esto es una alerta de warning');
-    toast.error('Esto es una alerta de error');
-  };
+  const datos = _.groupBy(data, 'Fecha');
+  console.log(datos);
+
   return (
     <div className='hidden h-full flex-col md:flex'>
-      <div className='debug h-full'>
-        tabla
-        <button onClick={fireAlert}>Disparar alerta</button>
-        <ReactLoading type='bars' color='blue' height={50} width={50} />
+      <div className='debug flex h-full justify-center p-6'>
+        <table className='block'>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Lote 1</th>
+              <th>Lote 2</th>
+              <th>Lote 3</th>
+              <th>Lote 4</th>
+              <th>Lote 5</th>
+              <th>Lote 6</th>
+              <th>Lote 7</th>
+              <th>Lote 8</th>
+              <th>Lote 9</th>
+              <th>Lote 10</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(datos).map((fecha) => {
+              return (
+                <tr key={`row_${fecha}`}>
+                  <td>
+                    <div>{fecha}</div>
+                  </td>
+                  {datos[fecha].map((lote) => {
+                    return (
+                      <td key={`row_${fecha}_${lote.Lote}`}>
+                        <div>{lote.Racimos}</div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
       <div>Paginacion</div>
     </div>
