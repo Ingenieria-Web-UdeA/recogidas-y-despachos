@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useNavigationContext } from '@context/NavigationContext';
 import { MdMenu, MdMenuOpen } from 'react-icons/md';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { open, setOpen } = useNavigationContext();
   return (
     <nav className='debug flex items-center justify-between gap-2 px-1 md:hidden'>
       <div className='flex items-center'>
         <button
           onClick={() => {
-            setIsOpen(!isOpen);
+            setOpen(!open);
           }}
-          className='text-2xl text-gray-900'
+          className='icon-dark'
         >
-          {isOpen ? <MdMenuOpen /> : <MdMenu />}
+          {open ? <MdMenuOpen /> : <MdMenu />}
         </button>
       </div>
       <div>

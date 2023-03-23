@@ -6,10 +6,10 @@ const ActionButtons = () => {
 
   return (
     <div className='flex items-center gap-2'>
-      <button onClick={() => setOpenModalRecogidas(true)}>
+      <button type='button' onClick={() => setOpenModalRecogidas(true)}>
         Nueva recogida
       </button>
-      <button onClick={() => setOpenModalDespachos(true)}>
+      <button type='button' onClick={() => setOpenModalDespachos(true)}>
         Nuevo despacho
       </button>
     </div>
