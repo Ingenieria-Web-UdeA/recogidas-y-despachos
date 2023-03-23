@@ -41,6 +41,7 @@ const RecogidasDespachos = () => {
       </div>
       <DesktopTable />
       <MobileCards />
+      <div className='debug'>Footer</div>
 
       <ModalRecogidas />
       <ModalDespachos />
@@ -53,8 +54,8 @@ const DesktopTable = () => {
   console.log(datos);
 
   return (
-    <div className='hidden h-full flex-col md:flex'>
-      <div className='debug flex h-full justify-center p-6'>
+    <div className='hidden h-full flex-col md:flex '>
+      <div className='debug flex h-[80vh] justify-center overflow-y-auto  p-6 '>
         <table className='block'>
           <thead>
             <tr>

@@ -39,7 +39,8 @@ select {
   @apply rounded-lg border border-gray-300 px-2 py-1 outline-none focus:border-indigo-500;
 }
 
-button {
+button,
+button[type='button'] {
   @apply rounded-lg bg-indigo-800 px-3 py-2 text-white hover:bg-indigo-500;
 }
 
@@ -47,6 +48,6 @@ button:disabled {
   @apply cursor-not-allowed bg-gray-300 text-gray-500;
 }
 
-button.secondary {
+button[type='button'].secondary {
   @apply bg-gray-400 text-gray-800 hover:bg-gray-200;
 }
