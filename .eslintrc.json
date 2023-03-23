@@ -1,75 +1,63 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:react/recommended",
-    "airbnb",
-    "airbnb-typescript",
-    "prettier"
-  ],
+  "root": true,
+  "extends": ["next/core-web-vitals", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module",
-    "plugins": ["react", "@typescript-eslint", "prettier", "typescript"],
-    "rules": {
-      "react/no-array-index-key": "warn",
-      "jsx-a11y/media-has-caption": "off",
-      "no-restricted-imports": [
-        "error",
-        {
-          "patterns": ["..*"]
-        }
-      ],
-      "prefer-destructuring": "warn",
-      "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
-      "react/prop-types": "off",
-      "react/function-component-definition": [
-        "error",
-        {
-          "namedComponents": "arrow-function",
-          "unnamedComponents": "arrow-function"
-        }
-      ],
-      "react/react-in-jsx-scope": "off",
-      "react/require-default-props": "off",
-      "no-use-before-define": "off",
-      "arrow-body-style": "warn",
-      "no-underscore-dangle": "off",
-      "import/prefer-default-export": "off",
-      "no-nested-ternary": "warn",
-      "import/no-unresolved": "off",
-      "react/jsx-props-no-spreading": "off",
-      "@typescript-eslint/no-use-before-define": "off",
-      "@typescript-eslint/return-await": "off",
-      "no-plusplus": "warn",
-      "prettier/prettier": [
-        "error",
-        {
-          "endOfLine": "auto"
-        }
-      ],
-      "no-console": "error",
-      "no-unused-vars": [2, { "args": "after-used", "argsIgnorePattern": "^(parent|args)" }],
-      "@typescript-eslint/no-unused-vars": [
-        2,
-        { "args": "after-used", "argsIgnorePattern": "^(parent|args)" }
-      ],
-      "jsx-a11y/anchor-is-valid": [
-        "error",
-        {
-          "components": ["Link"],
-          "specialLink": ["hrefLeft", "hrefRight"],
-          "aspects": ["invalidHref", "preferButton"]
-        }
-      ]
-    }
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "react/no-array-index-key": "warn",
+    "jsx-a11y/media-has-caption": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["..*"]
+      }
+    ],
+    "prefer-destructuring": "warn",
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "react/prop-types": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
+    "no-use-before-define": "off",
+    "arrow-body-style": "warn",
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "no-nested-ternary": "warn",
+    "import/no-unresolved": "off",
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/return-await": "off",
+    "no-plusplus": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-console": "error",
+    "no-unused-vars": [
+      2,
+      { "args": "after-used", "argsIgnorePattern": "^(parent|args)" }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      { "args": "after-used", "argsIgnorePattern": "^(parent|args)" }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ]
   }
 }
