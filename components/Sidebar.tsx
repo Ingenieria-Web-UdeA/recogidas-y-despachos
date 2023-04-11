@@ -9,7 +9,7 @@ const Sidebar = () => {
       className={`sidebar-desktop sidebar-mobile ${
         open ? 'flex' : 'hidden'
       } flex-col justify-between bg-gray-800 md:flex`}
-    >
+    > 
       <div className='flex flex-col gap-4'>
         <div className='flex md:hidden'>
           <button onClick={() => setOpen(false)} className='icon-white'>
@@ -20,7 +20,7 @@ const Sidebar = () => {
           <img src='' alt='logo' className='h-12 w-12' />
         </div>
         <nav>
-          <ul className='flex flex-col gap-3'>
+          <ul className='flex flex-col gap-3'> 
             <li>Resumen</li>
             <li>Recogidas</li>
             <li>Facturacion</li>

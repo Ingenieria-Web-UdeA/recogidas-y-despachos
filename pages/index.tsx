@@ -29,6 +29,7 @@ const Home: NextPage = () => (
 );
 
 const RecogidasDespachos = () => {
+  console.log('hola esto es un console.log');
   const [showFilters, setShowFilters] = useState<boolean>(false);
   return (
     <div className='flex h-full w-full flex-col gap-2 p-4'>

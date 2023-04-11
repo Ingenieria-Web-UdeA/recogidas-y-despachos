@@ -1,6 +1,6 @@
 import { useNavigationContext } from '@context/NavigationContext';
 import { MdMenu, MdMenuOpen } from 'react-icons/md';
-
+ 
 const Navbar = () => {
   const { open, setOpen } = useNavigationContext();
   return (
