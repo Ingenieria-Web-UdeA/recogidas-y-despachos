@@ -24,6 +24,7 @@ const UsersPage: NextPage = () => {
         setUsers(response.data.users);
         setLoading(false);
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log('Error', e);
       }
     };
@@ -48,7 +49,6 @@ const UsersPage: NextPage = () => {
             <tr key={`user_${user.id}`}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{user.password}</td>
             </tr>
           ))}
         </tbody>

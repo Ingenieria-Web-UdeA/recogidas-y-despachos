@@ -11,12 +11,12 @@ export default function handler(
 ) {
   // res.status(200).json({ name: 'John Doe' })
   try {
-    console.log(
-      'estoy recibiendo un reuest',
-      req.body,
-      req.headers,
-      req.method
-    );
+    // console.log(
+    //   'estoy recibiendo un reuest',
+    //   req.body,
+    //   req.headers,
+    //   req.method
+    // );
     res.status(200).json({ name: 'Daniel' });
   } catch {
     res.status(500);
