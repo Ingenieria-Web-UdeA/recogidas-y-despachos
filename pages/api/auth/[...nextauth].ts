@@ -5,7 +5,7 @@ import Auth0Provider from 'next-auth/providers/auth0';
 import prisma from 'config/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     Auth0Provider({

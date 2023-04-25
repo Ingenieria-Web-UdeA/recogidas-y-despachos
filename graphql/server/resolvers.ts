@@ -1,3 +1,4 @@
+import { getSession } from 'next-auth/react';
 import { Resolver } from 'types';
 
 const resolvers: Resolver = {
@@ -40,6 +41,7 @@ const resolvers: Resolver = {
   Query: {
     users: async (parent, args, context) => {
       const { db } = context;
+
       const users = await db.user.findMany();
       return users;
     },
