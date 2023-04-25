@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role, User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface Context {
@@ -15,4 +15,8 @@ export interface Resolver {
   Query: ResolverFunction;
   Mutation: ResolverFunction;
   [key: string]: ResolverFunction;
+}
+
+export interface ExtendedUser extends User {
+  role: Role;
 }
