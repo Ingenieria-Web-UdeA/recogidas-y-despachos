@@ -3,6 +3,12 @@ import { gql } from 'graphql-tag';
 const typeDefs = gql`
   scalar DateTime
 
+  type Invoice {
+    id: ID
+    date: DateTime
+    value: Float
+  }
+
   type Role {
     id: ID
     name: String
@@ -42,6 +48,7 @@ const typeDefs = gql`
     users: [User]
     user(email: String!): User
     collections: [Collecton]
+    invoices: [Invoice]
   }
 
   type Mutation {

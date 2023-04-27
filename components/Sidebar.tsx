@@ -3,6 +3,7 @@ import { signOut } from 'next-auth/react';
 import React from 'react';
 import { MdMenuOpen } from 'react-icons/md';
 import PrivateComponent from './PrivateComponent';
+import Link from 'next/link';
 
 const Sidebar = () => {
   const { open, setOpen } = useNavigationContext();
@@ -23,10 +24,14 @@ const Sidebar = () => {
         </div>
         <nav>
           <ul className='flex flex-col gap-3'>
-            <li>Resumen</li>
+            <li>
+              <Link href='/app'>Resumen</Link>
+            </li>
             <li>Recogidas</li>
             <PrivateComponent role='ADMIN'>
-              <li>Facturacion</li>
+              <li>
+                <Link href='/facturacion'>Facturación</Link>
+              </li>
             </PrivateComponent>
             <PrivateComponent role='ADMIN'>
               <li>Indicadores</li>

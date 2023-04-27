@@ -1,4 +1,3 @@
-import { getSession } from 'next-auth/react';
 import { Resolver } from 'types';
 
 const resolvers: Resolver = {
@@ -58,6 +57,48 @@ const resolvers: Resolver = {
       const { db } = context;
       const collections = await db.collection.findMany();
       return collections;
+    },
+    invoices: async (parent, args, context) => {
+      const { db, session } = context;
+
+      const email = session?.user?.email ?? '';
+
+      if (!session) {
+        return null;
+      }
+
+      const user = await db.user.findUnique({
+        where: {
+          email: email,
+        },
+        include: {
+          role: true,
+        },
+      });
+
+      const userRole = user?.role?.name;
+
+      if (userRole === 'ADMIN') {
+        return [
+          {
+            id: 1,
+            date: '2023-01-04',
+            value: 100000,
+          },
+          {
+            id: 2,
+            date: '2023-01-03',
+            value: 250000,
+          },
+          {
+            id: 3,
+            date: '2023-01-02',
+            value: 120000,
+          },
+        ];
+      }
+
+      return null;
     },
   },
   Mutation: {
