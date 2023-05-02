@@ -40,7 +40,8 @@ select {
 }
 
 button,
-button[type='button'] {
+button[type='button'],
+button[type='submit'] {
   @apply rounded-lg bg-indigo-800 px-3 py-2 text-white hover:bg-indigo-500;
 }
 

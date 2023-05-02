@@ -48,11 +48,18 @@ const typeDefs = gql`
     users: [User]
     user(email: String!): User
     collections: [Collecton]
+    filterCollections(month: Int, year: Int): [Collecton]
     invoices: [Invoice]
+    lots: [Lot]
   }
 
   type Mutation {
     createUser(name: String!, email: String!, password: String!): User
+    createCollection(
+      lot: String
+      bunches: Int
+      collectionDate: DateTime
+    ): Collecton
   }
 `;
 

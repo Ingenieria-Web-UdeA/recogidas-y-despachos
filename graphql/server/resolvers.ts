@@ -1,3 +1,4 @@
+import { create } from 'lodash';
 import { Resolver } from 'types';
 
 const resolvers: Resolver = {
@@ -55,8 +56,36 @@ const resolvers: Resolver = {
     },
     collections: async (parent, args, context) => {
       const { db } = context;
-      const collections = await db.collection.findMany({});
+      const collections = await db.collection.findMany({
+        take: 300,
+      });
       return collections;
+    },
+    filterCollections: async (parent, args, context) => {
+      const { db } = context;
+      const { month, year } = args;
+      const initialDate = new Date(year, month, 1);
+      const finalDate = new Date(year, month + 1, 1, -5, 0, 0);
+
+      return db.collection.findMany({
+        where: {
+          AND: [
+            {
+              collectionDate: {
+                gte: initialDate,
+              },
+            },
+            {
+              collectionDate: {
+                lt: finalDate,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          collectionDate: 'asc',
+        },
+      });
     },
     invoices: async (parent, args, context) => {
       const { db, session } = context;
@@ -100,6 +129,11 @@ const resolvers: Resolver = {
 
       return null;
     },
+    lots: async (parent, args, context) => {
+      const { db } = context;
+      const lots = await db.lot.findMany();
+      return lots;
+    },
   },
   Mutation: {
     createUser: async (parent, args, context) => {
@@ -114,6 +148,36 @@ const resolvers: Resolver = {
       });
 
       return newUser;
+    },
+    createCollection: async (parent, args, context) => {
+      const { db, session } = context;
+      const { lot, bunches, collectionDate } = args;
+
+      return await db.collection.upsert({
+        where: {
+          collectionDate_lotId: {
+            collectionDate: new Date(collectionDate),
+            lotId: lot,
+          },
+        },
+        update: {
+          bunches,
+        },
+        create: {
+          bunches: bunches,
+          collectionDate: new Date(collectionDate),
+          lot: {
+            connect: {
+              id: lot,
+            },
+          },
+          createdBy: {
+            connect: {
+              email: session?.user?.email ?? '',
+            },
+          },
+        },
+      });
     },
   },
 };

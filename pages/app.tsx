@@ -1,6 +1,6 @@
 import Layout from '@layouts/Layout';
 import Head from 'next/head';
-import { data } from 'utils/data';
+// import { data } from 'utils/data';
 import _ from 'lodash';
 import DateFilters from '@components/DateFilters';
 import ActionButtons from '@components/ActionButtons';
@@ -13,7 +13,12 @@ import { useState } from 'react';
 import PrivateRoute from '@components/PrivateRoute';
 import { MdFilterAlt, MdFilterAltOff } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_COLLECTIONS } from 'graphql/client/collections';
+import {
+  GET_ALL_COLLECTIONS,
+  GET_FILTERED_COLLECTIONS,
+} from 'graphql/client/collections';
+import { Collection } from '@prisma/client';
+import { ExtendedCollection } from 'types';
 
 const Home: NextPage = () => (
   <PrivateRoute>
@@ -31,8 +36,28 @@ const Home: NextPage = () => (
   </PrivateRoute>
 );
 
+const months = [
+  { value: 0, label: 'Enero' },
+  { value: 1, label: 'Febrero' },
+  { value: 2, label: 'Marzo' },
+  { value: 3, label: 'Abril' },
+  { value: 4, label: 'Mayo' },
+  { value: 5, label: 'Junio' },
+  { value: 6, label: 'Julio' },
+  { value: 7, label: 'Agosto' },
+  { value: 8, label: 'Septiembre' },
+  { value: 9, label: 'Octubre' },
+  { value: 10, label: 'Noviembre' },
+  { value: 11, label: 'Diciembre' },
+];
+
+const years = [2021, 2022, 2023];
+
 const RecogidasDespachos = () => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [selectedMonth, setSelectedMonth] = useState<number>(0);
+  const [selectedYear, setSelectedYear] = useState<number>(2021);
+
   return (
     <div className='flex h-full w-full flex-col gap-2 p-4'>
       <div className='flex justify-center'>
@@ -48,7 +73,41 @@ const RecogidasDespachos = () => {
         {showFilters && <DateFilters />}
         <ActionButtons />
       </div>
-      <DesktopTable />
+      <div className='flex w-full justify-center gap-4'>
+        <label htmlFor='month'>
+          <span>Mes</span>
+          <select
+            name='month'
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+          >
+            <option value='' disabled>
+              Seleccionar mes
+            </option>
+            {months.map((month) => (
+              <option key={`month_${month.value}`} value={month.value}>
+                {month.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor='year'>
+          <span>Año</span>
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            name='year'
+          >
+            <option value=''>Seleccionar año</option>
+            {years.map((year) => (
+              <option key={`year_${year}`} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <DesktopTable month={selectedMonth} year={selectedYear} />
       <MobileCards />
 
       <div>Footer</div>
@@ -59,8 +118,26 @@ const RecogidasDespachos = () => {
   );
 };
 
-const DesktopTable = () => {
-  const datos = _.groupBy(data, 'Fecha');
+interface DesktopTableProps {
+  month: number;
+  year: number;
+}
+
+const DesktopTable = ({ month, year }: DesktopTableProps) => {
+  const { data, loading } = useQuery<{
+    filterCollections: ExtendedCollection[];
+  }>(GET_FILTERED_COLLECTIONS, {
+    variables: {
+      month,
+      year,
+    },
+    fetchPolicy: 'network-only',
+  });
+
+  const datos = _.groupBy(data?.filterCollections, 'collectionDate');
+  console.log(datos);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className='hidden h-full flex-col md:flex'>
@@ -82,22 +159,18 @@ const DesktopTable = () => {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(datos).map((fecha) => {
-              return (
-                <tr key={`row_${fecha}`}>
-                  <td>
-                    <div>{fecha}</div>
+            {Object.keys(datos).map((day) => (
+              <tr key={`row_${day}`}>
+                <td>
+                  <div>{day}</div>
+                </td>
+                {datos[day].map((collection) => (
+                  <td key={`row_${day}_${collection.id}`}>
+                    <div>{collection.bunches}</div>
                   </td>
-                  {datos[fecha].map((lote) => {
-                    return (
-                      <td key={`row_${fecha}_${lote.Lote}`}>
-                        <div>{lote.Racimos}</div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

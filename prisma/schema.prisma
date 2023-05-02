@@ -96,6 +96,8 @@ model Collection {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([collectionDate, lotId])
 }
 
 model Shipment {
