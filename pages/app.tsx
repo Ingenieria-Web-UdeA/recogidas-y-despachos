@@ -12,6 +12,8 @@ import { CardLote } from '@components/CardLote';
 import { useState } from 'react';
 import PrivateRoute from '@components/PrivateRoute';
 import { MdFilterAlt, MdFilterAltOff } from 'react-icons/md';
+import { useQuery } from '@apollo/client';
+import { GET_ALL_COLLECTIONS } from 'graphql/client/collections';
 
 const Home: NextPage = () => (
   <PrivateRoute>

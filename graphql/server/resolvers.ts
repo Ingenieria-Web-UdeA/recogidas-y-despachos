@@ -55,7 +55,7 @@ const resolvers: Resolver = {
     },
     collections: async (parent, args, context) => {
       const { db } = context;
-      const collections = await db.collection.findMany();
+      const collections = await db.collection.findMany({});
       return collections;
     },
     invoices: async (parent, args, context) => {
