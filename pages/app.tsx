@@ -13,12 +13,13 @@ import { useState } from 'react';
 import PrivateRoute from '@components/PrivateRoute';
 import { MdFilterAlt, MdFilterAltOff } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
-import {
-  GET_ALL_COLLECTIONS,
-  GET_FILTERED_COLLECTIONS,
-} from 'graphql/client/collections';
-import { Collection } from '@prisma/client';
+import { GET_FILTERED_COLLECTIONS } from 'graphql/client/collections';
 import { ExtendedCollection } from 'types';
+import { TypeColumn } from '@inovua/reactdatagrid-community/types/TypeColumn';
+import ReactDataGrid from '@inovua/reactdatagrid-community';
+import '@inovua/reactdatagrid-community/index.css';
+import { Lot } from '@prisma/client';
+import { GET_LOTS } from 'graphql/client/lots';
 
 const Home: NextPage = () => (
   <PrivateRoute>
@@ -131,50 +132,77 @@ const DesktopTable = ({ month, year }: DesktopTableProps) => {
       month,
       year,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
   });
 
-  const datos = _.groupBy(data?.filterCollections, 'collectionDate');
-  console.log(datos);
+  const { data: lotData, loading: loadingLots } = useQuery<{ lots: Lot[] }>(
+    GET_LOTS,
+    {
+      fetchPolicy: 'cache-first',
+    }
+  );
 
-  if (loading) return <div>Loading...</div>;
+  const datos = _.groupBy(data?.filterCollections, 'collectionDate');
+
+  if (loading || loadingLots) return <div>Loading...</div>;
+
+  const lotColumns =
+    lotData?.lots?.map((lot) => ({
+      name: lot.name,
+      header: lot.name,
+      defaultFlex: 1,
+      headerProps: {
+        style: {
+          backgroundColor: '#3730A3',
+          color: 'white',
+        },
+      },
+    })) ?? [];
+
+  const filterValues =
+    lotData?.lots?.map((lot) => ({
+      name: lot.name,
+      operator: 'gte',
+      type: 'number',
+      value: '0',
+    })) ?? [];
+
+  const columns: TypeColumn[] = [
+    {
+      name: 'collectionDate',
+      header: 'Fecha de recogida',
+      defaultFlex: 1,
+      headerProps: {
+        style: {
+          backgroundColor: '#3730A3',
+          color: 'white',
+        },
+      },
+    },
+    ...lotColumns,
+  ];
+
+  const transformedData = Object.keys(datos).map((fecha) => {
+    const lotData: { [key: string]: string | number } = {
+      collectionDate: fecha,
+    };
+
+    datos[fecha].forEach((el) => {
+      lotData[el.lot.name] = el.bunches;
+    });
+
+    return lotData;
+  });
 
   return (
     <div className='hidden h-full flex-col md:flex'>
-      <div className='flex h-[80vh] justify-center overflow-y-auto p-6'>
-        <table className='block'>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Lote 1</th>
-              <th>Lote 2</th>
-              <th>Lote 3</th>
-              <th>Lote 4</th>
-              <th>Lote 5</th>
-              <th>Lote 6</th>
-              <th>Lote 7</th>
-              <th>Lote 8</th>
-              <th>Lote 9</th>
-              <th>Lote 10</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(datos).map((day) => (
-              <tr key={`row_${day}`}>
-                <td>
-                  <div>{day}</div>
-                </td>
-                {datos[day].map((collection) => (
-                  <td key={`row_${day}_${collection.id}`}>
-                    <div>{collection.bunches}</div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div>Paginacion</div>
+      <ReactDataGrid
+        columns={columns}
+        dataSource={transformedData}
+        defaultFilterValue={filterValues}
+        pagination
+        pageSizes={[10, 15, 20, 31]}
+      />
     </div>
   );
 };

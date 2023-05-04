@@ -13,22 +13,22 @@ h1 {
 table {
 }
 
-td,
+/* td,
 th {
   border: 1px solid black;
-}
+} */
 
 td > div {
   @apply flex justify-center px-3;
 }
 
-th {
+/* th {
   @apply bg-gray-800 px-3 text-white;
 }
 
 tr:nth-child(odd) {
   @apply bg-gray-300;
-}
+} */
 
 label {
   @apply flex flex-col;

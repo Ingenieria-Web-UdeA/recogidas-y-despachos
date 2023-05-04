@@ -1,4 +1,3 @@
-import { create } from 'lodash';
 import { Resolver } from 'types';
 
 const resolvers: Resolver = {
@@ -64,7 +63,7 @@ const resolvers: Resolver = {
     filterCollections: async (parent, args, context) => {
       const { db } = context;
       const { month, year } = args;
-      const initialDate = new Date(year, month, 1);
+      const initialDate = new Date(year, month, 1, -5, 0, 0);
       const finalDate = new Date(year, month + 1, 1, -5, 0, 0);
 
       return db.collection.findMany({
