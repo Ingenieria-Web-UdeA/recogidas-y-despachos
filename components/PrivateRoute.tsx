@@ -12,7 +12,12 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ role, children }: PrivateRouteProps) => {
   const { status, loading, session, role: userRole } = useUserData();
 
-  if (status === 'loading' || loading) return <div>Loading...</div>;
+  if (status === 'loading' || loading)
+    return (
+      <Layout>
+        <div>Loading...</div>
+      </Layout>
+    );
 
   if (!session)
     return (

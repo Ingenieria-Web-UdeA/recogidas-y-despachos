@@ -4,9 +4,12 @@ import Modal from './Modal';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_LOTS } from 'graphql/client/lots';
 import { Lot } from '@prisma/client';
-import { GET_FILTERED_COLLECTIONS, UPSERT_COLLECTION } from 'graphql/client/collections';
-import ReactLoading from 'react-loading';
+import {
+  GET_FILTERED_COLLECTIONS,
+  UPSERT_COLLECTION,
+} from 'graphql/client/collections';
 import { toast } from 'react-toastify';
+import { FormButtons } from './FormButtons';
 
 const ModalRecogidas = () => {
   const [upsertCollection, { loading: mutationLoading }] =
@@ -54,6 +57,7 @@ const ModalRecogidas = () => {
           <label htmlFor='lote'>
             <span>Lote</span>
             <select
+              required
               value={formData.lot}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, lot: e.target.value }))
@@ -73,6 +77,7 @@ const ModalRecogidas = () => {
           <label htmlFor='date'>
             <span>Fecha</span>
             <input
+              required
               value={formData.collectionDate}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -87,6 +92,7 @@ const ModalRecogidas = () => {
           <label htmlFor='racimos'>
             <span>Cantidad de racimos</span>
             <input
+              required
               type='number'
               name='racimos'
               min={0}
@@ -101,22 +107,10 @@ const ModalRecogidas = () => {
               placeholder='0'
             />
           </label>
-          <div className='flex w-full justify-center gap-4'>
-            <button type='submit' disabled={mutationLoading}>
-              {mutationLoading ? (
-                <ReactLoading type='spin' height={30} width={30} color='blue' />
-              ) : (
-                'Crear'
-              )}
-            </button>
-            <button
-              disabled={mutationLoading}
-              onClick={() => setOpenModalRecogidas(false)}
-              className='secondary'
-            >
-              Cancelar
-            </button>
-          </div>
+          <FormButtons
+            loading={mutationLoading}
+            closeModal={() => setOpenModalRecogidas(false)}
+          />
         </form>
       </div>
     </Modal>

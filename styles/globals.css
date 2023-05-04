@@ -61,6 +61,10 @@ li:hover {
   @apply cursor-pointer bg-gray-700;
 }
 
+li.active {
+  @apply border border-indigo-300 bg-gray-900;
+}
+
 .sidebar-mobile {
   @apply absolute top-0 left-0 h-screen w-1/2;
 }

@@ -14,6 +14,7 @@ const useUserData = () => {
       variables: {
         email: userEmail,
       },
+      fetchPolicy: 'cache-first',
     }
   );
 

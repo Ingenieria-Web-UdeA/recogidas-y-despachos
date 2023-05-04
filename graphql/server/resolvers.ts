@@ -178,6 +178,24 @@ const resolvers: Resolver = {
         },
       });
     },
+    createShipment: async (parent, args, context) => {
+      const { db, session } = context;
+      const { shipmentDate, shippedBunches, deliveredWeight } = args;
+
+      return await db.shipment.create({
+        data: {
+          shipmentDate: new Date(shipmentDate),
+          shippedBunches: shippedBunches,
+          deliveredWeight: deliveredWeight,
+          bunchWeight: deliveredWeight / shippedBunches,
+          createdBy: {
+            connect: {
+              email: session?.user?.email ?? '',
+            },
+          },
+        },
+      });
+    },
   },
 };
 

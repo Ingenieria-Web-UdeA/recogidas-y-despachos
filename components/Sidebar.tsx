@@ -4,6 +4,7 @@ import React from 'react';
 import { MdMenuOpen } from 'react-icons/md';
 import PrivateComponent from './PrivateComponent';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Sidebar = () => {
   const { open, setOpen } = useNavigationContext();
@@ -24,17 +25,14 @@ const Sidebar = () => {
         </div>
         <nav>
           <ul className='flex flex-col gap-3'>
-            <li>
-              <Link href='/app'>Resumen</Link>
-            </li>
-            <li>Recogidas</li>
+            <SidebarLink href='/resumen' title='Resumen' />
+            <SidebarLink href='/recogidas' title='Recogidas' />
+
             <PrivateComponent role='ADMIN'>
-              <li>
-                <Link href='/facturacion'>Facturación</Link>
-              </li>
+              <SidebarLink href='/facturacion' title='Facturación' />
             </PrivateComponent>
             <PrivateComponent role='ADMIN'>
-              <li>Indicadores</li>
+              <SidebarLink href='/indicadores' title='Indicadores' />
             </PrivateComponent>
           </ul>
         </nav>
@@ -43,6 +41,23 @@ const Sidebar = () => {
         Log out
       </button>
     </aside>
+  );
+};
+
+interface SidebarLinkProps {
+  href: string;
+  title: string;
+}
+
+const SidebarLink = ({ href, title }: SidebarLinkProps) => {
+  const router = useRouter();
+
+  const isActive = router.pathname === href;
+
+  return (
+    <Link href={href}>
+      <li className={isActive ? 'active' : ''}>{title}</li>
+    </Link>
   );
 };
 
