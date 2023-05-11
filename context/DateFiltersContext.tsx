@@ -26,8 +26,12 @@ interface DateFiltersContextProviderProps {
 const DateFiltersContextProvider = ({
   children,
 }: DateFiltersContextProviderProps) => {
-  const [selectedMonth, setSelectedMonth] = useState<number>(0);
-  const [selectedYear, setSelectedYear] = useState<number>(2021);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   return (
     <DateFiltersContext.Provider
       value={{ selectedMonth, setSelectedMonth, selectedYear, setSelectedYear }}

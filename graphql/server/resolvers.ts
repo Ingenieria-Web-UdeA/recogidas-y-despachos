@@ -50,6 +50,16 @@ const resolvers: Resolver = {
       return user;
     },
   },
+  CollectionByMonth: {
+    lot: async (parent, args, context) => {
+      const { db } = context;
+      return await db.lot.findFirst({
+        where: {
+          name: parent.name,
+        },
+      });
+    },
+  },
   Query: {
     users: async (parent, args, context) => {
       const { db } = context;
@@ -174,6 +184,15 @@ const resolvers: Resolver = {
       const { db } = context;
       const lots = await db.lot.findMany();
       return lots;
+    },
+    getCollectionsByMonth: async (parent, args, context) => {
+      const { db } = context;
+
+      return await db.$queryRaw`
+      select * from recogidas_mensuales
+      where year = ${args.year}
+      ;
+      `;
     },
   },
   Mutation: {

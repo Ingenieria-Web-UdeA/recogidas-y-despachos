@@ -10,6 +10,7 @@ import {
 } from 'graphql/client/collections';
 import { toast } from 'react-toastify';
 import { FormButtons } from './FormButtons';
+import { GET_COLLECTIONS_BY_MONTH } from 'graphql/client/indicators';
 
 const ModalRecogidas = () => {
   const [upsertCollection, { loading: mutationLoading }] =
@@ -33,7 +34,7 @@ const ModalRecogidas = () => {
           bunches: formData.bunches,
           collectionDate: formData.collectionDate,
         },
-        refetchQueries: [GET_FILTERED_COLLECTIONS],
+        refetchQueries: [GET_FILTERED_COLLECTIONS, GET_COLLECTIONS_BY_MONTH],
       });
       toast.success('Recogida creada exitosamente');
       setOpenModalRecogidas(false);

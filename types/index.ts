@@ -26,3 +26,10 @@ export interface ExtendedUser extends User {
 export interface ExtendedCollection extends Collection {
   lot: Lot;
 }
+
+export interface CollectionByMonth {
+  lot: Lot;
+  month: number;
+  totalCollectedBunches: number;
+  year: number;
+}
