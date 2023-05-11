@@ -2,24 +2,23 @@ import Layout from '@layouts/Layout';
 import Head from 'next/head';
 // import { data } from 'utils/data';
 import _ from 'lodash';
-import DateFilters from '@components/DateFilters';
+import { DateFilters } from '@components/DateFilters';
 import ActionButtons from '@components/ActionButtons';
 import { RecogidasContextProvider } from '@context/recogidasContext';
 import { ModalRecogidas } from '@components/modals/ModalRecogidas';
 import { ModalDespachos } from '@components/modals/ModalDespachos';
 import { NextPage } from 'next';
 import { CardLote } from '@components/CardLote';
-import { useState } from 'react';
 import PrivateRoute from '@components/PrivateRoute';
-import { MdFilterAlt, MdFilterAltOff } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
 import { GET_FILTERED_COLLECTIONS } from 'graphql/client/collections';
 import { ExtendedCollection } from 'types';
 import { TypeColumn } from '@inovua/reactdatagrid-community/types/TypeColumn';
 import ReactDataGrid from '@inovua/reactdatagrid-community';
-import '@inovua/reactdatagrid-community/index.css';
 import { Lot } from '@prisma/client';
 import { GET_LOTS } from 'graphql/client/lots';
+import { useDateFiltersContext } from '@context/DateFiltersContext';
+import '@inovua/reactdatagrid-community/index.css';
 
 const Home: NextPage = () => (
   <PrivateRoute>
@@ -37,100 +36,33 @@ const Home: NextPage = () => (
   </PrivateRoute>
 );
 
-const months = [
-  { value: 0, label: 'Enero' },
-  { value: 1, label: 'Febrero' },
-  { value: 2, label: 'Marzo' },
-  { value: 3, label: 'Abril' },
-  { value: 4, label: 'Mayo' },
-  { value: 5, label: 'Junio' },
-  { value: 6, label: 'Julio' },
-  { value: 7, label: 'Agosto' },
-  { value: 8, label: 'Septiembre' },
-  { value: 9, label: 'Octubre' },
-  { value: 10, label: 'Noviembre' },
-  { value: 11, label: 'Diciembre' },
-];
-
-const years = [2021, 2022, 2023];
-
-const RecogidasDespachos = () => {
-  const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [selectedMonth, setSelectedMonth] = useState<number>(0);
-  const [selectedYear, setSelectedYear] = useState<number>(2021);
-
-  return (
-    <div className='flex h-full w-full flex-col gap-2 p-4'>
-      <div className='flex justify-center'>
-        <h1>Recogidas y despachos</h1>
-        <button
-          className='icon-dark'
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          {showFilters ? <MdFilterAltOff /> : <MdFilterAlt />}
-        </button>
-      </div>
-      <div className='flex flex-col items-center justify-center gap-2 md:flex-row md:justify-between'>
-        {showFilters && <DateFilters />}
-        <ActionButtons />
-      </div>
-      <div className='flex w-full justify-center gap-4'>
-        <label htmlFor='month'>
-          <span>Mes</span>
-          <select
-            name='month'
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-          >
-            <option value='' disabled>
-              Seleccionar mes
-            </option>
-            {months.map((month) => (
-              <option key={`month_${month.value}`} value={month.value}>
-                {month.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label htmlFor='year'>
-          <span>Año</span>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            name='year'
-          >
-            <option value=''>Seleccionar año</option>
-            {years.map((year) => (
-              <option key={`year_${year}`} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <DesktopTable month={selectedMonth} year={selectedYear} />
-      <MobileCards />
-
-      <div>Footer</div>
-
-      <ModalRecogidas />
-      <ModalDespachos />
+const RecogidasDespachos = () => (
+  <div className='flex h-full w-full flex-col gap-2 p-4'>
+    <div className='flex justify-center'>
+      <h1>Recogidas y despachos</h1>
     </div>
-  );
-};
+    <div className='flex flex-col items-center justify-center gap-2 md:flex-row md:justify-between'>
+      <ActionButtons />
+    </div>
+    <DateFilters />
+    <DesktopTable />
+    <MobileCards />
 
-interface DesktopTableProps {
-  month: number;
-  year: number;
-}
+    <div>Footer</div>
 
-const DesktopTable = ({ month, year }: DesktopTableProps) => {
+    <ModalRecogidas />
+    <ModalDespachos />
+  </div>
+);
+
+const DesktopTable = () => {
+  const { selectedMonth, selectedYear } = useDateFiltersContext();
   const { data, loading } = useQuery<{
     filterCollections: ExtendedCollection[];
   }>(GET_FILTERED_COLLECTIONS, {
     variables: {
-      month,
-      year,
+      month: selectedMonth,
+      year: selectedYear,
     },
     fetchPolicy: 'cache-first',
   });

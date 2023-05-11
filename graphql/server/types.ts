@@ -60,6 +60,7 @@ const typeDefs = gql`
     user(email: String!): User
     collections: [Collecton]
     filterCollections(month: Int, year: Int): [Collecton]
+    filterShipments(month: Int, year: Int): [Shipment]
     invoices: [Invoice]
     lots: [Lot]
   }

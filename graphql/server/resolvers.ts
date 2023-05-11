@@ -37,6 +37,19 @@ const resolvers: Resolver = {
       return createdBy;
     },
   },
+  Shipment: {
+    createdBy: async (parent, args, context) => {
+      const { db } = context;
+
+      const user = await db.user.findUnique({
+        where: {
+          id: parent.userId,
+        },
+      });
+
+      return user;
+    },
+  },
   Query: {
     users: async (parent, args, context) => {
       const { db } = context;
@@ -63,8 +76,11 @@ const resolvers: Resolver = {
     filterCollections: async (parent, args, context) => {
       const { db } = context;
       const { month, year } = args;
-      const initialDate = new Date(year, month, 1, -5, 0, 0);
-      const finalDate = new Date(year, month + 1, 1, -5, 0, 0);
+
+      const { initialDate, finalDate } = getMonthInitialAndFinalDates({
+        year,
+        month,
+      });
 
       return db.collection.findMany({
         where: {
@@ -83,6 +99,32 @@ const resolvers: Resolver = {
         },
         orderBy: {
           collectionDate: 'asc',
+        },
+      });
+    },
+    filterShipments: async (parent, args, context) => {
+      const { db } = context;
+      const { month, year } = args;
+
+      const { initialDate, finalDate } = getMonthInitialAndFinalDates({
+        year,
+        month,
+      });
+
+      return await db.shipment.findMany({
+        where: {
+          AND: [
+            {
+              shipmentDate: {
+                gte: initialDate,
+              },
+            },
+            {
+              shipmentDate: {
+                lt: finalDate,
+              },
+            },
+          ],
         },
       });
     },
@@ -197,6 +239,24 @@ const resolvers: Resolver = {
       });
     },
   },
+};
+
+interface GetInitialMonthDatesProps {
+  year: number;
+  month: number;
+}
+
+const getMonthInitialAndFinalDates = ({
+  year,
+  month,
+}: GetInitialMonthDatesProps) => {
+  const initialDate = new Date(year, month, 1, -5, 0, 0);
+  const finalDate = new Date(year, month + 1, 1, -5, 0, 0);
+
+  return {
+    initialDate,
+    finalDate,
+  };
 };
 
 export { resolvers };

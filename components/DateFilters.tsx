@@ -1,16 +1,62 @@
-import React from 'react';
+import { useDateFiltersContext } from '@context/DateFiltersContext';
 
-const DateFilters = () => (
-  <div className='flex flex-col gap-2 md:flex-row'>
-    <label htmlFor='date-from'>
-      <span>Desde</span>
-      <input name='date-from' type='date' />
-    </label>
-    <label htmlFor='date-to'>
-      <span>Hasta</span>
-      <input name='date-to' type='date' />
-    </label>
-  </div>
-);
+const months = [
+  { value: 0, label: 'Enero' },
+  { value: 1, label: 'Febrero' },
+  { value: 2, label: 'Marzo' },
+  { value: 3, label: 'Abril' },
+  { value: 4, label: 'Mayo' },
+  { value: 5, label: 'Junio' },
+  { value: 6, label: 'Julio' },
+  { value: 7, label: 'Agosto' },
+  { value: 8, label: 'Septiembre' },
+  { value: 9, label: 'Octubre' },
+  { value: 10, label: 'Noviembre' },
+  { value: 11, label: 'Diciembre' },
+];
 
-export default DateFilters;
+const years = [2021, 2022, 2023];
+
+const DateFilters = () => {
+  const { selectedMonth, setSelectedMonth, selectedYear, setSelectedYear } =
+    useDateFiltersContext();
+
+  return (
+    <div className='flex w-full justify-center gap-4'>
+      <label htmlFor='month'>
+        <span>Mes</span>
+        <select
+          name='month'
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+        >
+          <option value='' disabled>
+            Seleccionar mes
+          </option>
+          {months.map((month) => (
+            <option key={`month_${month.value}`} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label htmlFor='year'>
+        <span>Año</span>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+          name='year'
+        >
+          <option value=''>Seleccionar año</option>
+          {years.map((year) => (
+            <option key={`year_${year}`} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
+};
+
+export { DateFilters };
