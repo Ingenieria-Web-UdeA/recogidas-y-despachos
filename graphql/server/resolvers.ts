@@ -55,7 +55,7 @@ const resolvers: Resolver = {
       const { db } = context;
       return await db.lot.findFirst({
         where: {
-          name: parent.name,
+          name: parent.lot,
         },
       });
     },
@@ -85,11 +85,13 @@ const resolvers: Resolver = {
     },
     filterCollections: async (parent, args, context) => {
       const { db } = context;
-      const { month, year } = args;
+      const { initMonth, initYear, finalMonth, finalYear } = args.dateFilters;
 
       const { initialDate, finalDate } = getMonthInitialAndFinalDates({
-        year,
-        month,
+        initMonth,
+        initYear,
+        finalMonth,
+        finalYear,
       });
 
       return db.collection.findMany({
@@ -114,11 +116,13 @@ const resolvers: Resolver = {
     },
     filterShipments: async (parent, args, context) => {
       const { db } = context;
-      const { month, year } = args;
+      const { initMonth, initYear, finalMonth, finalYear } = args.dateFilters;
 
       const { initialDate, finalDate } = getMonthInitialAndFinalDates({
-        year,
-        month,
+        initMonth,
+        initYear,
+        finalMonth,
+        finalYear,
       });
 
       return await db.shipment.findMany({
@@ -187,10 +191,21 @@ const resolvers: Resolver = {
     },
     getCollectionsByMonth: async (parent, args, context) => {
       const { db } = context;
+      const { initMonth, initYear, finalMonth, finalYear } = args.dateFilters;
+
+      const initialDate = new Date(initYear, initMonth, 0);
+
+      const finalDate = new Date(finalYear, finalMonth + 1, 0);
 
       return await db.$queryRaw`
-      select * from recogidas_mensuales
-      where year = ${args.year}
+      select 
+      concat(year, '-', month) as "monthYear",
+      month,
+      year,
+      "totalCollectedBunches",
+      lot
+      from recogidas_mensuales
+      where date between ${initialDate} and ${finalDate}
       ;
       `;
     },
@@ -261,16 +276,20 @@ const resolvers: Resolver = {
 };
 
 interface GetInitialMonthDatesProps {
-  year: number;
-  month: number;
+  initMonth: number;
+  initYear: number;
+  finalMonth: number;
+  finalYear: number;
 }
 
 const getMonthInitialAndFinalDates = ({
-  year,
-  month,
+  initMonth,
+  initYear,
+  finalMonth,
+  finalYear,
 }: GetInitialMonthDatesProps) => {
-  const initialDate = new Date(year, month, 1, -5, 0, 0);
-  const finalDate = new Date(year, month + 1, 1, -5, 0, 0);
+  const initialDate = new Date(initYear, initMonth, 1, -5, 0, 0);
+  const finalDate = new Date(finalYear, finalMonth + 1, 1, -5, 0, 0);
 
   return {
     initialDate,

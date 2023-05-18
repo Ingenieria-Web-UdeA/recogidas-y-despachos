@@ -59,16 +59,24 @@ const typeDefs = gql`
     month: Int
     year: Int
     lot: Lot
+    monthYear: String
     totalCollectedBunches: Int
+  }
+
+  input DateFilters {
+    initMonth: Int
+    initYear: Int
+    finalMonth: Int
+    finalYear: Int
   }
 
   type Query {
     users: [User]
     user(email: String!): User
     collections: [Collecton]
-    filterCollections(month: Int, year: Int): [Collecton]
-    filterShipments(month: Int, year: Int): [Shipment]
-    getCollectionsByMonth(year: Int): [CollectionByMonth]
+    filterCollections(dateFilters: DateFilters): [Collecton]
+    filterShipments(dateFilters: DateFilters): [Shipment]
+    getCollectionsByMonth(dateFilters: DateFilters): [CollectionByMonth]
     invoices: [Invoice]
     lots: [Lot]
   }

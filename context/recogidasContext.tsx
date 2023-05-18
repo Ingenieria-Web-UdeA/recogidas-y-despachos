@@ -20,7 +20,7 @@ const RecogidasContext = createContext<RecogidasContextProps>(
 export const useRecogidasContext = () => useContext(RecogidasContext);
 
 interface RecogidasContextProviderProps {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 const RecogidasContextProvider = ({

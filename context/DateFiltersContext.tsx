@@ -6,11 +6,16 @@ import {
   useState,
 } from 'react';
 
+interface DateFilters {
+  initMonth: number;
+  finalMonth: number;
+  initYear: number;
+  finalYear: number;
+}
+
 interface DateFiltersContextProps {
-  selectedMonth: number;
-  setSelectedMonth: Dispatch<SetStateAction<number>>;
-  selectedYear: number;
-  setSelectedYear: Dispatch<SetStateAction<number>>;
+  dateFilters: DateFilters;
+  setDateFilters: Dispatch<SetStateAction<DateFilters>>;
 }
 
 const DateFiltersContext = createContext<DateFiltersContextProps>(
@@ -30,12 +35,15 @@ const DateFiltersContextProvider = ({
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
-  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
-  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
+  const [dateFilters, setDateFilters] = useState<DateFilters>({
+    initMonth: currentMonth,
+    finalMonth: currentMonth,
+    initYear: currentYear,
+    finalYear: currentYear,
+  });
+
   return (
-    <DateFiltersContext.Provider
-      value={{ selectedMonth, setSelectedMonth, selectedYear, setSelectedYear }}
-    >
+    <DateFiltersContext.Provider value={{ dateFilters, setDateFilters }}>
       {children}
     </DateFiltersContext.Provider>
   );

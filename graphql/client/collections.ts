@@ -14,8 +14,8 @@ const GET_ALL_COLLECTIONS = gql`
 `;
 
 const GET_FILTERED_COLLECTIONS = gql`
-  query FilterCollections($month: Int, $year: Int) {
-    filterCollections(month: $month, year: $year) {
+  query FilterCollections($dateFilters: DateFilters) {
+    filterCollections(dateFilters: $dateFilters) {
       bunches
       collectionDate
       id

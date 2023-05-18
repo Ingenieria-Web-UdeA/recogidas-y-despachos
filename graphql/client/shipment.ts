@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 const GET_FILTERED_SHIPMENTS = gql`
-  query FilterShipments($month: Int, $year: Int) {
-    filterShipments(month: $month, year: $year) {
+  query FilterShipments($dateFilters: DateFilters) {
+    filterShipments(dateFilters: $dateFilters) {
       id
       shipmentDate
       shippedBunches

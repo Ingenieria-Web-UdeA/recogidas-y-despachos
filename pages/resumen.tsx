@@ -6,42 +6,48 @@ import ReactDataGrid from '@inovua/reactdatagrid-community';
 import { TypeColumn } from '@inovua/reactdatagrid-community/types/TypeColumn';
 import Layout from '@layouts/Layout';
 import { GET_FILTERED_SHIPMENTS } from 'graphql/client/shipment';
-import '@inovua/reactdatagrid-community/index.css';
 import { Shipment } from '@prisma/client';
 import _ from 'lodash';
 import ActionButtons from '@components/ActionButtons';
+import { ModalRecogidas } from '@components/modals/ModalRecogidas';
+import { ModalDespachos } from '@components/modals/ModalDespachos';
+import { RecogidasContextProvider } from '@context/recogidasContext';
+import '@inovua/reactdatagrid-community/index.css';
 
 const ResumenPage = () => (
   <PrivateRoute>
     <Layout>
-      <div className='flex h-full w-full flex-col gap-5 p-10'>
-        <div className='flex justify-center'>
-          <h1>Resumen</h1>
+      <RecogidasContextProvider>
+        <div className='flex h-full w-full flex-col gap-5 p-10'>
+          <div className='flex justify-center'>
+            <h1>Resumen</h1>
+          </div>
+          <div className='flex flex-col items-center justify-center gap-2 md:flex-row md:justify-between'>
+            <ActionButtons />
+          </div>
+          <DateFilters />
+          <div className='flex w-full justify-center'>
+            <ShipmentSummaryCards />
+          </div>
+          <div className='flex h-full w-full'>
+            <ShipmentSummaryTable />
+          </div>
         </div>
-        <div className='flex flex-col items-center justify-center gap-2 md:flex-row md:justify-between'>
-          <ActionButtons />
-        </div>
-        <DateFilters />
-        <div className='flex w-full justify-center'>
-          <ShipmentSummaryCards />
-        </div>
-        <div className='flex h-full w-full'>
-          <ShipmentSummaryTable />
-        </div>
-      </div>
+        <ModalRecogidas />
+        <ModalDespachos />
+      </RecogidasContextProvider>
     </Layout>
   </PrivateRoute>
 );
 
 const useGetShipmentData = () => {
-  const { selectedMonth, selectedYear } = useDateFiltersContext();
+  const { dateFilters } = useDateFiltersContext();
 
   const { data, loading } = useQuery<{ filterShipments: Shipment[] }>(
     GET_FILTERED_SHIPMENTS,
     {
       variables: {
-        month: selectedMonth,
-        year: selectedYear,
+        dateFilters,
       },
     }
   );

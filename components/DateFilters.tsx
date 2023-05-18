@@ -1,6 +1,12 @@
 import { useDateFiltersContext } from '@context/DateFiltersContext';
+import {
+  RangeSelector,
+  Scale,
+  MinorTick,
+  SliderMarker,
+} from 'devextreme-react/range-selector';
 
-const months = [
+export const months = [
   { value: 0, label: 'Enero' },
   { value: 1, label: 'Febrero' },
   { value: 2, label: 'Marzo' },
@@ -15,55 +21,44 @@ const months = [
   { value: 11, label: 'Diciembre' },
 ];
 
-const years = [2021, 2022, 2023];
 
-interface DateFiltersProps {
-  hideMonth?: boolean;
-  hideYear?: boolean;
-}
+const DateFilters = () => {
+  const { dateFilters, setDateFilters } = useDateFiltersContext();
 
-const DateFilters = ({ hideMonth, hideYear }: DateFiltersProps) => {
-  const { selectedMonth, setSelectedMonth, selectedYear, setSelectedYear } =
-    useDateFiltersContext();
+  const startValue = new Date(2021, 0, 1);
+  const endValue = new Date();
+  const range = [
+    new Date(dateFilters.initYear, dateFilters.initMonth, 1),
+    new Date(dateFilters.finalYear, dateFilters.finalMonth, 1),
+  ];
 
   return (
     <div className='flex w-full justify-center gap-4'>
-      {!hideMonth && (
-        <label htmlFor='month'>
-          <span>Mes</span>
-          <select
-            name='month'
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-          >
-            <option value='' disabled>
-              Seleccionar mes
-            </option>
-            {months.map((month) => (
-              <option key={`month_${month.value}`} value={month.value}>
-                {month.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
-      {!hideYear && (
-        <label htmlFor='year'>
-          <span>Año</span>
-          <select
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            name='year'
-          >
-            <option value=''>Seleccionar año</option>
-            {years.map((year) => (
-              <option key={`year_${year}`} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
+      <RangeSelector
+        id='range-selector'
+        title='Rango de fechas'
+        defaultValue={range}
+        width='100%'
+        onValueChanged={(e) => {
+          setDateFilters({
+            initMonth: new Date(e.value[0]).getMonth(),
+            initYear: new Date(e.value[0]).getFullYear(),
+            finalMonth: new Date(e.value[1]).getMonth(),
+            finalYear: new Date(e.value[1]).getFullYear(),
+          });
+        }}
+      >
+        <Scale
+          startValue={startValue}
+          endValue={endValue}
+          minorTickInterval='month'
+          tickInterval='month'
+          minRange='month'
+        >
+          <MinorTick visible={false} />
+        </Scale>
+        <SliderMarker format='monthAndDay' />
+      </RangeSelector>
     </div>
   );
 };

@@ -56,13 +56,12 @@ const RecogidasDespachos = () => (
 );
 
 const DesktopTable = () => {
-  const { selectedMonth, selectedYear } = useDateFiltersContext();
+  const { dateFilters } = useDateFiltersContext();
   const { data, loading } = useQuery<{
     filterCollections: ExtendedCollection[];
   }>(GET_FILTERED_COLLECTIONS, {
     variables: {
-      month: selectedMonth,
-      year: selectedYear,
+      dateFilters,
     },
     fetchPolicy: 'cache-first',
   });
