@@ -21,7 +21,6 @@ export const months = [
   { value: 11, label: 'Diciembre' },
 ];
 
-
 const DateFilters = () => {
   const { dateFilters, setDateFilters } = useDateFiltersContext();
 
@@ -29,7 +28,7 @@ const DateFilters = () => {
   const endValue = new Date();
   const range = [
     new Date(dateFilters.initYear, dateFilters.initMonth, 1),
-    new Date(dateFilters.finalYear, dateFilters.finalMonth, 1),
+    new Date(dateFilters.finalYear, dateFilters.finalMonth + 1, 1),
   ];
 
   return (

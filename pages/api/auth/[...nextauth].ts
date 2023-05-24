@@ -6,6 +6,11 @@ import prisma from 'config/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 export const authOptions: NextAuthOptions = {
+  callbacks: {
+    // async signIn({ user, account, profile, email, credentials }) {
+    //   return '/resumen';
+    // },
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     Auth0Provider({

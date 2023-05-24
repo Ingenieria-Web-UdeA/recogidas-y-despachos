@@ -10,7 +10,7 @@ const HomePage = () => {
     <div className='flex h-screen w-full flex-col items-center justify-center gap-5'>
       <h1 className='text-6xl'>Sistema de Recogidas y Despachos</h1>
       {session ? (
-        <Link href='/app'>
+        <Link href='/resumen'>
           <button>Ir a la app</button>
         </Link>
       ) : (
